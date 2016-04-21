@@ -43,6 +43,8 @@ public class Controller {
 
     private ArrayList<ManPage> manpages;
 
+    private boolean inPage;
+
 
     public Controller(Stage stage, StackPane root) {
         this.stage = stage;
@@ -53,6 +55,8 @@ public class Controller {
 
         this.root.getStylesheets().add("custom.css");
         this.root.setId("background");
+
+        inPage = false;
     }
 
     /*
@@ -118,36 +122,43 @@ public class Controller {
         userCommandsButton.setOnMouseClicked(e -> {
             // display all user command man pages
             handleButtonClick("user");
+            inPage = false;
         });
 
         systemCallsButton.setOnMouseClicked(e -> {
             // display all system call man pages
             handleButtonClick("system");
+            inPage = false;
         });
 
         libraryFunctionsButton.setOnMouseClicked(e -> {
             // display all library function man pages
             handleButtonClick("library");
+            inPage = false;
         });
 
         devicesButton.setOnMouseClicked(e -> {
             // display all devices man pages
             handleButtonClick("devices");
+            inPage = false;
         });
 
         filesButton.setOnMouseClicked(e -> {
             // display all files man
             handleButtonClick("files");
+            inPage = false;
         });
 
         overviewsButton.setOnMouseClicked(e -> {
             // display all overview man pages
             handleButtonClick("overviews");
+            inPage = false;
         });
 
         superuserButton.setOnMouseClicked(e -> {
             // display all super user man pages
             handleButtonClick("superuser");
+            inPage = false;
         });
     }
 
@@ -195,7 +206,10 @@ public class Controller {
 
             @Override
             public void handle(MouseEvent event) {
-                handleListCellClick(commands.getSelectionModel().getSelectedItem());
+                if(!inPage) {
+                    handleListCellClick(commands.getSelectionModel().getSelectedItem());
+                    inPage = true;
+                }
             }
         });
     }
