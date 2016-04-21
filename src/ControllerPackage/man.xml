@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <manpages>
     <page id="cd">
-        <name>cd — change the working directory</name>
+        <name>cd</name>
         <synopsis>cd [−L|−P] [directory]
                   cd −</synopsis>
         <description>The cd utility shall change the working directory of the current
@@ -106,23 +106,423 @@
             variable is set, the OLDPWD environment variable shall also be set to
             the value of the old working directory (that is the current working
             directory immediately prior to the call to cd).</description>
-        <options>The cd utility shall conform to the Base Definitions volume of
-            POSIX.1‐2008, Section 12.2, Utility Syntax Guidelines.
+        <type>user</type>
+    </page>
 
-            The following options shall be supported by the implementation:
+    <page id="cat">
+        <name>cat</name>
+        <synopsis>cat [OPTION]... [FILE]...</synopsis>
+        <description>Concatenate FILE(s) to standard output.
 
-            −L        Handle the operand dot-dot logically; symbolic link
-            components shall not be resolved before dot-dot components
-            are processed (see steps 8.  and 9. in the DESCRIPTION).
+            With no FILE, or when FILE is -, read standard input.
 
-            −P        Handle the operand dot-dot physically; symbolic link
-            components shall be resolved before dot-dot components are
-            processed (see step 7. in the DESCRIPTION).
+            -A, --show-all
+            equivalent to -vET
 
-            If both −L and −P options are specified, the last of these options
-            shall be used and all others ignored. If neither −L nor −P is
-            specified, the operand shall be handled dot-dot logically; see the
-            DESCRIPTION.</options>
+            -b, --number-nonblank
+            number nonempty output lines, overrides -n
+
+            -e     equivalent to -vE
+
+            -E, --show-ends
+            display $ at end of each line
+
+            -n, --number
+            number all output lines
+
+            -s, --squeeze-blank
+            suppress repeated empty output lines
+
+            -t     equivalent to -vT
+
+            -T, --show-tabs
+            display TAB characters as ^I
+
+            -u     (ignored)
+
+            -v, --show-nonprinting
+            use ^ and M- notation, except for LFD and TAB
+
+            --help display this help and exit
+
+            --version
+            output version information and exit</description>
+        <type>user</type>
+    </page>
+
+    <page id="cp">
+        <name>cp</name>
+        <synopsis>cp [OPTION]... [-T] SOURCE DEST
+            cp [OPTION]... SOURCE... DIRECTORY
+            cp [OPTION]... -t DIRECTORY SOURCE...</synopsis>
+        <description>Copy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY.
+
+            Mandatory arguments to long options are mandatory for short options
+            too.
+
+            -a, --archive
+            same as -dR --preserve=all
+
+            --attributes-only
+            don't copy the file data, just the attributes
+
+            --backup[=CONTROL]
+            make a backup of each existing destination file
+
+            -b     like --backup but does not accept an argument
+
+            --copy-contents
+            copy contents of special files when recursive
+
+            -d     same as --no-dereference --preserve=links
+
+            -f, --force
+            if an existing destination file cannot be opened, remove it
+            and try again (this option is ignored when the -n option is
+            also used)
+
+            -i, --interactive
+            prompt before overwrite (overrides a previous -n option)
+
+            -H     follow command-line symbolic links in SOURCE
+
+            -l, --link
+            hard link files instead of copying
+
+            -L, --dereference
+            always follow symbolic links in SOURCE
+
+            -n, --no-clobber
+            do not overwrite an existing file (overrides a previous -i
+            option)
+
+            -P, --no-dereference
+            never follow symbolic links in SOURCE
+
+            -p     same as --preserve=mode,ownership,timestamps
+
+            --preserve[=ATTR_LIST]
+            preserve the specified attributes (default:
+            mode,ownership,timestamps), if possible additional attributes:
+            context, links, xattr, all
+
+            --no-preserve=ATTR_LIST
+            don't preserve the specified attributes
+
+            --parents
+            use full source file name under DIRECTORY
+
+            -R, -r, --recursive
+            copy directories recursively
+
+            --reflink[=WHEN]
+            control clone/CoW copies. See below
+
+            --remove-destination
+            remove each existing destination file before attempting to
+            open it (contrast with --force)
+
+            --sparse=WHEN
+            control creation of sparse files. See below
+
+            --strip-trailing-slashes
+            remove any trailing slashes from each SOURCE argument
+
+            -s, --symbolic-link
+            make symbolic links instead of copying
+
+            -S, --suffix=SUFFIX
+            override the usual backup suffix
+
+            -t, --target-directory=DIRECTORY
+            copy all SOURCE arguments into DIRECTORY
+
+            -T, --no-target-directory
+            treat DEST as a normal file
+
+            -u, --update
+            copy only when the SOURCE file is newer than the destination
+            file or when the destination file is missing
+
+            -v, --verbose
+            explain what is being done
+
+            -x, --one-file-system
+            stay on this file system
+
+            -Z     set SELinux security context of destination file to default
+            type
+
+            --context[=CTX]
+            like -Z, or if CTX is specified then set the SELinux or SMACK
+            security context to CTX
+
+            --help display this help and exit
+
+            --version
+            output version information and exit
+
+            By default, sparse SOURCE files are detected by a crude heuristic and
+            the corresponding DEST file is made sparse as well.  That is the
+            behavior selected by --sparse=auto.  Specify --sparse=always to
+            create a sparse DEST file whenever the SOURCE file contains a long
+            enough sequence of zero bytes.  Use --sparse=never to inhibit
+            creation of sparse files.
+
+            When --reflink[=always] is specified, perform a lightweight copy,
+            where the data blocks are copied only when modified.  If this is not
+            possible the copy fails, or if --reflink=auto is specified, fall back
+            to a standard copy.
+
+            The backup suffix is '~', unless set with --suffix or
+            SIMPLE_BACKUP_SUFFIX.  The version control method may be selected via
+            the --backup option or through the VERSION_CONTROL environment
+            variable.  Here are the values:
+
+            none, off
+            never make backups (even if --backup is given)
+
+            numbered, t
+            make numbered backups
+
+            existing, nil
+            numbered if numbered backups exist, simple otherwise
+
+            simple, never
+            always make simple backups
+
+            As a special case, cp makes a backup of SOURCE when the force and
+            backup options are given and SOURCE and DEST are the same name for an
+            existing, regular file.</description>
+        <type>user</type>
+
+    </page>
+
+    <page id="chmod">
+        <name>chmod</name>
+        <synopsis>chmod [OPTION]... MODE[,MODE]... FILE...
+            chmod [OPTION]... OCTAL-MODE FILE...
+            chmod [OPTION]... --reference=RFILE FILE...</synopsis>
+        <description>This  manual  page documents the GNU version of chmod.  chmod changes the file mode bits of each given file according to mode, which can be
+            either a symbolic representation of changes to make, or an octal number representing the bit pattern for the new mode bits.
+
+            The format of a symbolic mode is [ugoa...][[+-=][perms...]...], where perms is either zero or more letters from the set rwxXst, or a single
+            letter from the set ugo.  Multiple symbolic modes can be given, separated by commas.
+
+            A  combination  of  the letters ugoa controls which users' access to the file will be changed: the user who owns it (u), other users in the
+            file's group (g), other users not in the file's group (o), or all users (a).  If none of these are given, the effect is as if a were given,
+            but bits that are set in the umask are not affected.
+
+            The operator + causes the selected file mode bits to be added to the existing file mode bits of each file; - causes them to be removed; and
+            = causes them to be added and causes unmentioned bits to be removed except that a directory's unmentioned set user and group  ID  bits  are
+            not affected.
+
+            The  letters  rwxXst  select  file  mode  bits  for  the affected users: read (r), write (w), execute (or search for directories) (x), exe‐
+            cute/search only if the file is a directory or already has execute permission for some user (X), set user or group  ID  on  execution  (s),
+            restricted  deletion  flag or sticky bit (t).  Instead of one or more of these letters, you can specify exactly one of the letters ugo: the
+            permissions granted to the user who owns the file (u), the permissions granted to other users who are members of the file's group (g),  and
+            the permissions granted to users that are in neither of the two preceding categories (o).
+
+            A  numeric  mode is from one to four octal digits (0-7), derived by adding up the bits with values 4, 2, and 1.  Omitted digits are assumed
+            to be leading zeros.  The first digit selects the set user ID (4) and set group ID (2) and restricted deletion or  sticky  (1)  attributes.
+            The  second  digit  selects permissions for the user who owns the file: read (4), write (2), and execute (1); the third selects permissions
+            for other users in the file's group, with the same values; and the fourth for other users not in the file's group, with the same values.
+
+            chmod never changes the permissions of symbolic links; the chmod system call cannot change their permissions.  This is not a problem  since
+            the  permissions  of  symbolic links are never used.  However, for each symbolic link listed on the command line, chmod changes the permis‐
+            sions of the pointed-to file.  In contrast, chmod ignores symbolic links encountered during recursive directory traversals.</description>
+        <type>system</type>
+    </page>
+
+    <page id="wget">
+        <name>wget</name>
+        <synopsis>wget [option]... [URL]...</synopsis>
+        <description>GNU Wget is a free utility for non-interactive download of files from
+            the Web.  It supports HTTP, HTTPS, and FTP protocols, as well as
+            retrieval through HTTP proxies.
+
+            Wget is non-interactive, meaning that it can work in the background,
+            while the user is not logged on.  This allows you to start a
+            retrieval and disconnect from the system, letting Wget finish the
+            work.  By contrast, most of the Web browsers require constant user's
+            presence, which can be a great hindrance when transferring a lot of
+            data.
+
+            Wget can follow links in HTML, XHTML, and CSS pages, to create local
+            versions of remote web sites, fully recreating the directory
+            structure of the original site.  This is sometimes referred to as
+            "recursive downloading."  While doing that, Wget respects the Robot
+            Exclusion Standard (/robots.txt).  Wget can be instructed to convert
+            the links in downloaded files to point at the local files, for
+            offline viewing.
+
+            Wget has been designed for robustness over slow or unstable network
+            connections; if a download fails due to a network problem, it will
+            keep retrying until the whole file has been retrieved.  If the server
+            supports regetting, it will instruct the server to continue the
+            download from where it left off.</description>
+        <type>user</type>
+    </page>
+
+    <page id="pow">
+        <name>pow</name>
+        <synopsis>double pow(double x, double y);</synopsis>
+        <description>These functions return the value of x raised to the power of y.</description>
+        <type>library</type>
+    </page>
+
+    <page id="tty">
+        <name>tty</name>
+        <synopsis>tty</synopsis>
+        <description>The file /dev/tty is a character file with major number 5 and minor
+            number 0, usually of mode 0666 and owner.group root.tty.  It is a
+            synonym for the controlling terminal of a process, if any.
+
+            In addition to the ioctl(2) requests supported by the device that tty
+            refers to, the ioctl(2) request TIOCNOTTY is supported.
+
+            TIOCNOTTY
+            Detach the calling process from its controlling terminal.
+
+            If the process is the session leader, then SIGHUP and SIGCONT signals
+            are sent to the foreground process group and all processes in the
+            current session lose their controlling tty.
+
+            This ioctl(2) call works only on file descriptors connected to
+            /dev/tty.  It is used by daemon processes when they are invoked by a
+            user at a terminal.  The process attempts to open /dev/tty.  If the
+            open succeeds, it detaches itself from the terminal by using
+            TIOCNOTTY, while if the open fails, it is obviously not attached to a
+            terminal and does not need to detach itself.</description>
+        <type>devices</type>
+    </page>
+
+    <page id="acct">
+        <name>acct</name>
+        <synopsis>include sys/acct.h</synopsis>
+        <description>If the kernel is built with the process accounting option enabled
+            (CONFIG_BSD_PROCESS_ACCT), then calling acct(2) starts process
+            accounting, for example:
+
+            acct("/var/log/pacct");
+
+            When process accounting is enabled, the kernel writes a record to the
+            accounting file as each process on the system terminates.  This
+            record contains information about the terminated process, and is
+            defined in &lt;sys/acct.h&gt; as follows:
+
+            #define ACCT_COMM 16
+
+            typedef u_int16_t comp_t;
+
+            struct acct {
+            char ac_flag;           /* Accounting flags */
+            u_int16_t ac_uid;       /* Accounting user ID */
+            u_int16_t ac_gid;       /* Accounting group ID */
+            u_int16_t ac_tty;       /* Controlling terminal */
+            u_int32_t ac_btime;     /* Process creation time
+            (seconds since the Epoch) */
+            comp_t    ac_utime;     /* User CPU time */
+            comp_t    ac_stime;     /* System CPU time */
+            comp_t    ac_etime;     /* Elapsed time */
+            comp_t    ac_mem;       /* Average memory usage (kB) */
+            comp_t    ac_io;        /* Characters transferred (unused) */
+            comp_t    ac_rw;        /* Blocks read or written (unused) */
+            comp_t    ac_minflt;    /* Minor page faults */
+            comp_t    ac_majflt;    /* Major page faults */
+            comp_t    ac_swaps;     /* Number of swaps (unused) */
+            u_int32_t ac_exitcode;  /* Process termination status
+            (see wait(2)) */
+            char      ac_comm[ACCT_COMM+1];
+            /* Command name (basename of last
+            executed command; null-terminated) */
+            char      ac_pad[X];    /* padding bytes */
+            };
+
+            enum {          /* Bits that may be set in ac_flag field */
+            AFORK = 0x01,           /* Has executed fork, but no exec */
+            ASU   = 0x02,           /* Used superuser privileges */
+            ACORE = 0x08,           /* Dumped core */
+            AXSIG = 0x10            /* Killed by a signal */
+            };
+
+            The comp_t data type is a floating-point value consisting of a 3-bit,
+            base-8 exponent, and a 13-bit mantissa.  A value, c, of this type can
+            be converted to a (long) integer as follows:
+
+            v = (c &amp; 0x1fff) &lt;&lt; (((c >> 13) &amp; 0x7) * 3);
+
+            The ac_utime, ac_stime, and ac_etime fields measure time in "clock
+            ticks"; divide these values by sysconf(_SC_CLK_TCK) to convert them
+            to seconds.
+
+            Version 3 accounting file format
+            Since kernel 2.6.8, an optional alternative version of the accounting
+            file can be produced if the CONFIG_BSD_PROCESS_ACCT_V3 option is set
+            when building the kernel.  With this option is set, the records
+            written to the accounting file contain additional fields, and the
+            width of c_uid and ac_gid fields is widened from 16 to 32 bits (in
+            line with the increased size of UID and GIDs in Linux 2.4 and later).
+            The records are defined as follows:
+
+            struct acct_v3 {
+            char      ac_flag;      /* Flags */
+            char      ac_version;   /* Always set to ACCT_VERSION (3) */
+            u_int16_t ac_tty;       /* Controlling terminal */
+            u_int32_t ac_exitcode;  /* Process termination status */
+            u_int32_t ac_uid;       /* Real user ID */
+            u_int32_t ac_gid;       /* Real group ID */
+            u_int32_t ac_pid;       /* Process ID */
+            u_int32_t ac_ppid;      /* Parent process ID */
+            u_int32_t ac_btime;     /* Process creation time */
+            float     ac_etime;     /* Elapsed time */
+            comp_t    ac_utime;     /* User CPU time */
+            comp_t    ac_stime;     /* System time */
+            comp_t    ac_mem;       /* Average memory usage (kB) */
+            comp_t    ac_io;        /* Characters transferred (unused) */
+            comp_t    ac_rw;        /* Blocks read or written
+            (unused) */
+            comp_t    ac_minflt;    /* Minor page faults */
+            comp_t    ac_majflt;    /* Major page faults */
+            comp_t    ac_swaps;     /* Number of swaps (unused) */
+            char      ac_comm[ACCT_COMM]; /* Command name */
+            };</description>
+        <type>files</type>
+    </page>
+
+    <page id="boot">
+        <name>boot</name>
+        <synopsis>none</synopsis>
+        <description>The bootup process (or "boot sequence") varies in details among
+            systems, but can be roughly divided into phases controlled by the
+            following components:
+
+            1.  hardware
+
+            2.  operating system (OS) loader
+
+            3.  kernel
+
+            4.  root user-space process (init and inittab)
+
+            5.  boot scripts</description>
+        <type>overviews</type>
+    </page>
+
+    <page id="auditd">
+        <name>auditd</name>
+        <synopsis>auditd [-a] [-f] [-l] [-n] [-s disable|enable|nochange]</synopsis>
+        <description>auditd is the userspace component to the Linux Auditing System. It's
+            responsible for writing audit records to the disk. Viewing the logs
+            is done with the ausearch or aureport utilities. Configuring the
+            audit system or loading rules is done with the auditctl utility.
+            During startup, the rules in /etc/audit/audit.rules are read by
+            auditctl and loaded into the kernel. Alternately, there is also an
+            augenrules program that reads rules located in /etc/audit/rules.d/
+            and compiles them into an audit.rules file. The audit daemon itself
+            has some configuration options that the admin may wish to customize.
+            They are found in the auditd.conf file.</description>
+        <type>superuser</type>
     </page>
 
 </manpages>
