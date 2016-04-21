@@ -16,7 +16,7 @@ public class ManPage {
     }
 
     public String toString() {
-        return this.name + "\n" + this.synopsis + "\n" + this.description;
+        return "Name: " + this.name + "\nUsage: " + this.synopsis + "\nDescription: " + this.description;
     }
 
     public String getName() {

@@ -2,11 +2,13 @@
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -171,7 +173,7 @@ public class Controller {
                     }
                     else {
                         Text text = new Text(in.toString());
-                        text.setWrappingWidth(150);
+                        text.setWrappingWidth(500);
                         setGraphic(text);
                     }
                 }
@@ -188,6 +190,14 @@ public class Controller {
         }
 
         this.setCommands(commandsList);
+
+        this.commands.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                handleListCellClick(commands.getSelectionModel().getSelectedItem());
+            }
+        });
     }
 
     public void setCommands(ArrayList<String> commands) {
@@ -203,6 +213,16 @@ public class Controller {
         for(ManPage item : this.manpages) {
             if(item.compareType(type))
                 newCommands.add(item.getName());
+        }
+        this.setCommands(newCommands);
+    }
+
+    public void handleListCellClick(String command) {
+        ArrayList<String> newCommands = new ArrayList<>();
+
+        for(ManPage item : this.manpages) {
+            if(item.getName().equals(command))
+                newCommands.add(item.toString());
         }
         this.setCommands(newCommands);
     }
