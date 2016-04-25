@@ -1,4 +1,4 @@
-//package ControllerPackage;
+// Jacob Hackett
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -25,12 +24,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Controller {
 
+    // stage and root variables
     private Stage stage;
     private StackPane root;
 
+    // button variables
     private Button userCommandsButton;
     private Button systemCallsButton;
     private Button libraryFunctionsButton;
@@ -38,24 +40,31 @@ public class Controller {
     private Button filesButton;
     private Button overviewsButton;
     private Button superuserButton;
+    private Button allButton;
 
+    //list view to store commands
     private ListView<String> commands;
 
+    //arraylist to store manpages
     private ArrayList<ManPage> manpages;
 
+    //boolean to control clicking the listview cells
     private boolean inPage;
 
-
+    //constructor
     public Controller(Stage stage, StackPane root) {
         this.stage = stage;
         this.root = root;
 
+        // parses manpages from xml into an arraylist of ManPage objects
         this.manpages = new ArrayList<ManPage>();
         this.setupManPages();
 
+        //setup stylesheet and id of root
         this.root.getStylesheets().add("custom.css");
         this.root.setId("background");
 
+        //inPage boolean is false at the start
         inPage = false;
     }
 
@@ -65,22 +74,40 @@ public class Controller {
      * @return void
      */
     public void initDisplay() {
+        // setup boxes
         VBox vbox = new VBox();
         HBox tophbox = new HBox();
         HBox hbox1 = new HBox();
         HBox hbox2 = new HBox();
         HBox hbox3 = new HBox();
+        HBox instructionsHBox = new HBox();
 
+        //initialize buttons
         initButtons();
 
+        // top label
         Label topLabel = new Label("ManHelp");
         topLabel.setId("title");
         topLabel.setTextFill(Paint.valueOf("#FFFFFF"));
 
+        // add label to the top box
         tophbox.getChildren().addAll(topLabel);
-        hbox1.getChildren().addAll(userCommandsButton, systemCallsButton, libraryFunctionsButton, devicesButton, filesButton);
-        hbox2.getChildren().addAll(overviewsButton, superuserButton);
 
+        // label to show some instructions
+        Label instructionsLabel = new Label("Select a command below to see details and sort the commands using the buttons");
+        instructionsLabel.setId("instructions");
+        instructionsLabel.setTextFill(Paint.valueOf("#FFFFFF"));
+
+        // add label to box and edit box alignment and spacing
+        instructionsHBox.getChildren().addAll(instructionsLabel);
+        instructionsHBox.setAlignment(Pos.CENTER);
+        instructionsHBox.setSpacing(10);
+
+        // add buttons to boxes
+        hbox1.getChildren().addAll(userCommandsButton, systemCallsButton, libraryFunctionsButton, devicesButton, filesButton);
+        hbox2.getChildren().addAll(overviewsButton, superuserButton, allButton);
+
+        // setup box alignments and spacings
         tophbox.setSpacing(10);
         tophbox.setAlignment(Pos.TOP_CENTER);
         hbox1.setSpacing(10);
@@ -88,18 +115,21 @@ public class Controller {
         hbox2.setSpacing(10);
         hbox2.setAlignment(Pos.CENTER);
 
+        // create the listview
         this.createCommandsListView();
 
+        // add listview to the box and edit box alignment and spacing
         hbox3.getChildren().addAll(this.commands);
-
         hbox3.setSpacing(10);
         hbox3.setAlignment(Pos.CENTER);
 
-        vbox.getChildren().addAll(tophbox, hbox1, hbox2, hbox3);
+        // add boxes to big vbox and edit alignment and spacing
+        vbox.getChildren().addAll(tophbox, instructionsHBox, hbox1, hbox2, hbox3);
 
-        vbox.setSpacing(25);
+        vbox.setSpacing(15);
         vbox.setAlignment(Pos.CENTER);
 
+        // add box to the root
         this.root.getChildren().addAll(vbox);
     }
 
@@ -110,6 +140,7 @@ public class Controller {
      */
     public void initButtons() {
 
+        // inits the buttons with given text
         userCommandsButton = new Button("User Commands");
         systemCallsButton = new Button("System Calls");
         libraryFunctionsButton = new Button("Library Functions");
@@ -117,8 +148,9 @@ public class Controller {
         filesButton = new Button("Files");
         overviewsButton = new Button("Overviews, Conventions and Misc.");
         superuserButton = new Button("Superuser and System Admin");
+        allButton = new Button("Show All");
 
-
+        // event handlers below to handle the button clicks
         userCommandsButton.setOnMouseClicked(e -> {
             // display all user command man pages
             handleButtonClick("user");
@@ -160,8 +192,14 @@ public class Controller {
             handleButtonClick("superuser");
             inPage = false;
         });
+
+        allButton.setOnMouseClicked(e -> {
+            handleButtonClick("all");
+            inPage = false;
+        });
     }
 
+    // clears the listview
     public void clearCommands() {
         this.commands.setCellFactory((ListView<String> lv) ->
             new ListCell<String>() {
@@ -191,6 +229,7 @@ public class Controller {
             });
     }
 
+    // creates the listview for commands to be stored
     public void createCommandsListView() {
         this.commands = new ListView<String>();
         this.commands.setId("list-view-id");
@@ -202,8 +241,8 @@ public class Controller {
 
         this.setCommands(commandsList);
 
+        // set up event handler for clicking on a list cell
         this.commands.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
             @Override
             public void handle(MouseEvent event) {
                 if(!inPage) {
@@ -214,23 +253,29 @@ public class Controller {
         });
     }
 
+    // set the commands in the listview to this given arraylist of strings
     public void setCommands(ArrayList<String> commands) {
         this.clearCommands();
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(commands);
+        Collections.sort(data);
         this.commands.setItems(data);
     }
 
+    // button click handler
+    // sets the listview to have the correct commands in there based on the button clicked
     public void handleButtonClick(String type) {
         ArrayList<String> newCommands = new ArrayList<>();
 
-        for(ManPage item : this.manpages) {
-            if(item.compareType(type))
+        for (ManPage item : this.manpages) {
+            if (item.compareType(type) || type.equals("all"))
                 newCommands.add(item.getName());
         }
         this.setCommands(newCommands);
     }
 
+    // listcell click handler
+    // sets the listview to have the information about the clicked command
     public void handleListCellClick(String command) {
         ArrayList<String> newCommands = new ArrayList<>();
 
@@ -241,6 +286,7 @@ public class Controller {
         this.setCommands(newCommands);
     }
 
+    //parses man pages from xml file man.xml
     public void setupManPages() {
         //XML parser code from:
         //http://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/

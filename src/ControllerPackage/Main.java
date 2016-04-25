@@ -1,4 +1,4 @@
-//package ControllerPackage;
+// Jacob Hackett
 
 import javafx.application.Application;
 import javafx.scene.Scene;
